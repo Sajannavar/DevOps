@@ -1,94 +1,106 @@
-## End-to-End Bank Application Deployment using DevSecOps on AWS EKS
-- This is a multi-tier bank an application written in Java (Springboot).
+Here's a `README.md` file that provides instructions for setting up and running the Java Spring Boot application using the provided Docker and Docker Compose configurations.
 
-![Login diagram](images/login.png)
-![Transactions diagram](images/transactions.png)
+```markdown
+# Spring Boot Application with Docker
 
-### PRE-REQUISITES FOR THIS PROJECT:
-- AWS Account
-- AWS Ubuntu EC2 instance (t2.medium)
-- Install Docker
-- Install docker compose
-#
-### DEPLOYMENT:
-| Deployments    | Paths |
-| -------- | ------- |
-| Deployment using Docker and Networking | <a href="#Docker">Click me </a>     |
-| Deployment using Docker Compose | <a href="#dockercompose">Click me </a>     |
-| Deployment using Jenkins on EKS | <a href="#">Click me </a>     |
-| Deployment using Argocd on EKS| <a href="#">Click me </a>     |
+This project demonstrates how to deploy a Java Spring Boot application using Docker and Docker Compose. It includes a Spring Boot application that connects to a MySQL database.
 
-#
-### STEPS TO IMPLEMENT THE PROJECT
-- **<p id="Docker">Deployment using Docker</p>**
-  - Clone the repository
-  ```bash
-  git clone -b DevOps https://github.com/DevMadhup/Springboot-BankApp.git
-  ```
-  #
-  - Install docker, docker compose and provide neccessary permission
-  ```bash
-  sudo apt update -y
+## Table of Contents
 
-  sudo apt install docker.io docker-compose-v2 -y
+- [Prerequisites](#prerequisites)
+- [Directory Structure](#directory-structure)
+- [Getting Started](#getting-started)
+- [Building and Running the Application](#building-and-running-the-application)
+- [Accessing the Application](#accessing-the-application)
+- [Environment Variables](#environment-variables)
+- [Stopping the Application](#stopping-the-application)
+- [Contributing](#contributing)
+- [License](#license)
 
-  sudo usermod -aG docker $USER && newgrp docker
-  ``` 
-  #
-  - Move to the cloned repository
-  ```bash
-  cd Springboot-BankApp
-  ```
-  #
-  - Build the Dockerfile
-  ```bash
-  docker build -t madhupdevops/springboot-bankapp .
-  ```
-> [!Important]
-> Make sure to change docker build command with your DockerHub username.
-  #
-  - Create a docker network
-  ```bash
-  docker network create bankapp
-  ```
-  #
-  - Run MYSQL container
-  ```bash
-  docker run -itd --name mysql -e MYSQL_ROOT_PASSWORD=Test@123 -e MYSQL_DATABASE=BankDB --network=bankapp mysql
-  ```
-  #
-  - Run Application container
-  ```bash
-  docker run -itd --name BankApp -e SPRING_DATASOURCE_USERNAME="root" -e SPRING_DATASOURCE_URL="jdbc:mysql://mysql:3306/BankDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC" -e SPRING_DATASOURCE_PASSWORD="Test@123" --network=bankapp -p 8080:8080 madhupdevops/springboot-bankapp
-  ```
-  #
-  - Verify deployment
-  ```bash
-  docker ps
-  ```
-  # 
-  - Open port 8080 of your AWS instance and access your application
-  ```bash
-  http://<public-ip>:8080
-  ```
-  ### Congratulations, you have deployed the application using Docker 
-  #
-- **<p id="dockercompose">Deployment using Docker compose</p>**
-- Install docker compose
-```bash
-sudo apt update
-sudo apt install docker-compose-v2 -y
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your machine:
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+## Directory Structure
+
+Your project directory should have the following structure:
+
 ```
-#
-- Run docker-compose file present in the root directory of a project
-```bash
-docker compose up -d
+/your-project
+├── Dockerfile
+├── docker-compose.yml
+├── pom.xml
+└── src
+    └── ... (your Spring Boot application source code)
 ```
-#
-- Access it on port 8080
+
+## Getting Started
+
+1. **Clone the repository** (if applicable):
+   ```bash
+   git clone https://your-repo-url.git
+   cd your-project
+   ```
+
+2. **Add your Spring Boot application code**: Ensure that your Spring Boot application is located in the `src` directory, and the `pom.xml` file is properly configured with your dependencies.
+
+## Building and Running the Application
+
+In your terminal, navigate to the project directory and execute the following command:
+
 ```bash
-  http://<public-ip>:8080
+docker-compose up --build
 ```
-> [!Important]
-> If you face issues with exiting docker container while running docker compose, run ``` docker compose down``` and then ``` docker compose up -d ```.
-#
+
+This command will:
+
+- Build the Docker images based on the `Dockerfile`.
+- Create and start the containers defined in the `docker-compose.yml` file.
+
+## Accessing the Application
+
+Once the application is running, you can access the Spring Boot application at:
+
+```
+http://localhost:8080
+```
+
+## Environment Variables
+
+The following environment variables are set in the `docker-compose.yml` file for the Spring Boot application:
+
+- `SPRING_DATASOURCE_URL`: URL for the MySQL database (default: `jdbc:mysql://db:3306/mydb`)
+- `SPRING_DATASOURCE_USERNAME`: Database username (default: `root`)
+- `SPRING_DATASOURCE_PASSWORD`: Database password (default: `secret`)
+
+You can modify these values in the `docker-compose.yml` file as needed.
+
+## Stopping the Application
+
+To stop the running application, press `CTRL+C` in the terminal where the containers are running. To remove the containers, run:
+
+```bash
+docker-compose down
+```
+
+This command will stop and remove the containers, along with the networks created by Docker Compose.
+
+## Contributing
+
+If you'd like to contribute to this project, please fork the repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```
+
+### Usage
+
+1. Create a file named `README.md` in the root of your project directory.
+2. Copy and paste the content above into the `README.md` file.
+3. Customize any sections as needed, especially the repository URL and licensing information.
+
+This README provides clear instructions for anyone looking to set up and run the Spring Boot application with Docker, ensuring they have all the necessary information at their fingertips. If you need any further adjustments or additions, just let me know!
