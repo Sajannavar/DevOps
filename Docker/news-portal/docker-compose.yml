@@ -8,7 +8,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      - DB_HOST=13.201.167.107
+      - DB_HOST=db
       - DB_NAME=newsportal
       - DB_USER=root
       - DB_PASSWORD=root

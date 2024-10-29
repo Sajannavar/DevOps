@@ -1,5 +1,5 @@
 <?php
-define('DB_SERVER','13.201.167.107');
+define('DB_SERVER','db');
 define('DB_USER','root');
 define('DB_PASS' ,'root');
 define('DB_NAME','newsportal');
