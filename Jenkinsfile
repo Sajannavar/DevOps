@@ -11,7 +11,7 @@ pipeline{
             }
         }
     }
-    post actions{
+    post {
         always{
             echo "This is the end of the pipeline"
         }
