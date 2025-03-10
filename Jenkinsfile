@@ -1,25 +1,76 @@
-pipeline{
+pipeline {
     agent any
-    // parameters{
-    //     string name: 'First_Name'
-    // }
+    
+    environment {
+        BUILD_DIR = 'build_output'
+    }
+    
+    stages {
 
-    stages{
-        stage('Stage'){
-            steps{
-                echo "Hello World"
+        // Stage 1: Checkout the code from GitHub
+        stage('Checkout') {
+            steps {
+                echo 'Cloning repository...'
+                git branch: 'main', url: 'https://github.com/YourUsername/YourRepo.git'
+            }
+        }
+
+        // Stage 2: System Information
+        stage('System Info') {
+            steps {
+                script {
+                    def osName = sh(script: 'uname -a', returnStdout: true).trim()
+                    echo "Running on OS: ${osName}"
+                    def jenkinsNode = env.NODE_NAME
+                    echo "Running on Node: ${jenkinsNode}"
+                }
+            }
+        }
+
+        // Stage 3: Build the Project
+        stage('Build') {
+            steps {
+                echo 'Starting the build process...'
+                sh '''
+                    mkdir -p ${BUILD_DIR}
+                    echo "Building project..." > ${BUILD_DIR}/output.txt
+                '''
+            }
+        }
+
+        // Stage 4: Run Tests
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh '''
+                    echo "Simulating tests..."
+                    sleep 5
+                    echo "Tests completed successfully."
+                '''
+            }
+        }
+
+        // Stage 5: Archive Artifacts (Save build outputs)
+        stage('Archive Artifacts') {
+            steps {
+                echo 'Archiving artifacts...'
+                archiveArtifacts artifacts: "${BUILD_DIR}/*", fingerprint: true
             }
         }
     }
+
+    // Post Actions: Run these after all stages
     post {
-        always{
-            echo "This is the end of the pipeline"
+        success {
+            echo '🎉 Build SUCCESSFUL!'
+            sh 'echo "Build completed at $(date)"'
         }
-        success{
-            echo "The pipeline was successful"
+        failure {
+            echo '❌ Build FAILED!'
         }
-        failure{
-            echo "The pipeline failed"
+        always {
+            echo '🏁 Build finished. Cleaning up...'
+            sh 'rm -rf ${BUILD_DIR}'
         }
     }
 }
