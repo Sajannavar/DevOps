@@ -4,7 +4,7 @@ pipeline{
     stages{
         stage('Stage'){
             steps{
-                systemctl status jenkins
+                sh systemctl status jenkins
             }
         }
         stage('Build'){
