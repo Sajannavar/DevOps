@@ -1,21 +1,12 @@
 pipeline{
     agent any
-
+    environment{
+        BACKUP_SUFFIX = new Date().format("yyyyMMdd_HHmm")
+    }
     stages{
         stage('Stage'){
             steps{
-                sh 'systemctl status jenkins'
-                sh 'echo $USER'
-            }
-        }
-        stage('Build'){
-            steps{
-                echo "Build Stage"
-            }
-        }
-        stage('Test'){
-            steps{
-                echo "Test Stage"
+                echo env.BACKUP_SUFFIX
             }
         }
     }
