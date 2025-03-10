@@ -1,12 +1,13 @@
 pipeline{
     agent any
-    environment{
-        BACKUP_SUFFIX = new Date().format("yyyyMMdd_HHmm")
+    parameters{
+        string name: 'First_Name'
     }
+
     stages{
         stage('Stage'){
             steps{
-                echo 'env.BACKUP_SUFFIX'
+                echo "My name is $params.First_Name"
             }
         }
     }
