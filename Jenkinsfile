@@ -6,7 +6,7 @@ pipeline{
     stages{
         stage('Stage'){
             steps{
-                echo env.BACKUP_SUFFIX
+                echo 'env.BACKUP_SUFFIX'
             }
         }
     }
