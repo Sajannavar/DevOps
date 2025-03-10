@@ -4,7 +4,7 @@ pipeline{
     stages{
         stage('Stage'){
             steps{
-                echo "Build Stage"
+                systemctl status jenkins
             }
         }
         stage('Build'){
