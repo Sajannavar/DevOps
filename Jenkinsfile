@@ -5,6 +5,7 @@ pipeline{
         stage('Stage'){
             steps{
                 sh 'systemctl status jenkins'
+                sh 'echo $USER'
             }
         }
         stage('Build'){
