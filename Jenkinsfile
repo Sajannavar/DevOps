@@ -6,7 +6,6 @@ pipeline {
     }
     
     stages {
-
         // Stage 1: Checkout the code from GitHub
         stage('Checkout') {
             steps {
@@ -22,8 +21,7 @@ pipeline {
                     def osName = sh(script: 'uname -a', returnStdout: true).trim()
                     echo "Running on OS: ${osName}"
                     def jenkinsNode = env.NODE_NAME
-                    echo "Running on Node: ${jenkinsNode}"
-                    
+                    echo "Running on Node: ${jenkinsNode}"                    
                 }
             }
         }
@@ -34,10 +32,8 @@ pipeline {
                 echo 'Starting the build process...'
                 sh '''
                     mkdir -p ${BUILD_DIR}
-                    echo "Building project..." > ${BUILD_DIR}/output.txt
-                    
-                '''
-                
+                    echo "Building project..." > ${BUILD_DIR}/output.txt                    
+                '''               
             }
         }
 
@@ -57,8 +53,7 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 echo 'Archiving artifacts...'
-                archiveArtifacts artifacts: "${BUILD_DIR}/*", fingerprint: true
-                
+                archiveArtifacts artifacts: "${BUILD_DIR}/*", fingerprint: true                
             }
         }
     }
