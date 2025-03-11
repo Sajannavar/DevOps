@@ -12,6 +12,7 @@ pipeline {
             steps {
                 echo 'Cloning repository...'
                 git branch: 'main', url: 'https://github.com/Sajannavar/DevOps.git'
+                sh 'sleep 220'
             }
         }
 
@@ -23,6 +24,7 @@ pipeline {
                     echo "Running on OS: ${osName}"
                     def jenkinsNode = env.NODE_NAME
                     echo "Running on Node: ${jenkinsNode}"
+                    sh 'sleep 380'
                 }
             }
         }
@@ -34,7 +36,9 @@ pipeline {
                 sh '''
                     mkdir -p ${BUILD_DIR}
                     echo "Building project..." > ${BUILD_DIR}/output.txt
+                    sleep 380
                 '''
+                
             }
         }
 
@@ -44,7 +48,7 @@ pipeline {
                 echo 'Running tests...'
                 sh '''
                     echo "Simulating tests..."
-                    sleep 5
+                    sleep 320
                     echo "Tests completed successfully."
                 '''
             }
@@ -55,6 +59,7 @@ pipeline {
             steps {
                 echo 'Archiving artifacts...'
                 archiveArtifacts artifacts: "${BUILD_DIR}/*", fingerprint: true
+                sh 'sleep 520'
             }
         }
     }
