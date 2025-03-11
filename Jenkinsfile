@@ -2,12 +2,14 @@ pipeline{
     agent any
 
     stages{
-        stage('Execute Shell Script'){
+        stage('Loops Usage'){
             steps{
-                sh '''
-                chmod +x ./script.sh
-                ./script.sh
-                '''
+                script{
+                    echo "Table of 5"
+                    for (int i = 1; i <= 10; i++){
+                        echo "5 * ${i} = ${5 * i}"
+                    }
+                }
             }
         }
     }
