@@ -6,7 +6,7 @@ pipeline{
                 script{
                     echo "Table of 5"
                     for (int i = 1; i <= 10; i++){
-                        echo "5 * ${i} = ${5 * i}"
+                        echo "10 * ${i} = ${10 * i}"
                     }
                 }
             }
