@@ -1,13 +1,14 @@
+def greet(name) {
+    echo "Hello, ${name}"
+}
+
 pipeline{
     agent any
     stages{
-        stage('Loops Usage'){
+        stage('Greet'){
             steps{
                 script{
-                    echo "Table of 5"
-                    for (int i = 1; i <= 10; i++){
-                        echo "10 * ${i} = ${10 * i}"
-                    }
+                    greet('Jenkins')
                 }
             }
         }
