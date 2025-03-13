@@ -3,7 +3,7 @@ pipeline{
         label 'JenkinsAgent'
     }
     stages{
-        stage{
+        stage('Hello'){
             steps{
                 echo 'Hello World'
             }
