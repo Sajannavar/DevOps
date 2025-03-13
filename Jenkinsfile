@@ -1,26 +1,12 @@
 pipeline{
-    agent any
-
+    agent {
+        label 'JenkinsAgent'
+    }
     stages{
-        stage('Docker Version'){
+        stage{
             steps{
-                sh 'docker --version'
+                echo 'Hello World'
             }
-        }
-        stage('Docker Info'){
-            steps{
-                sh 'docker info'
-            }
-        }
-        stage('Docker Pull Nginx Image'){
-            steps{
-                sh 'docker pull nginx'
-            }
-        }
-        stage('Docker Run Nginx Container'){
-            steps{
-                sh 'docker run -d -p 9090:90 --name mynginx nginx'
-            }   
         }
     }
 }
