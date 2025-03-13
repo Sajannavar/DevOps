@@ -19,7 +19,7 @@ pipeline{
         }
         stage('Docker Run Nginx Container'){
             steps{
-                sh 'docker run -d -p 9090:80 --name mynginx nginx'
+                sh 'docker run -d -p 9090:90 --name mynginx nginx'
             }   
         }
     }
