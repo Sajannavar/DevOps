@@ -14,15 +14,13 @@ pipeline{
         }
         stage('Docker Pull Nginx Image'){
             steps{
-                sh 'docker pull nginx
-'
+                sh 'docker pull nginx'
             }
         }
         stage('Docker Run Nginx Container'){
             steps{
-                sh 'docker run -d -p 80:80 --name my-nginx nginx
-'
-            }
+                sh 'docker run -d -p 8080:80 --name mynginx nginx'
+            }   
         }
     }
 }
