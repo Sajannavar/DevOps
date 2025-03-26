@@ -1,9 +1,9 @@
 pipeline {
     agent any
     
-    environment {
-        ALERT_EMAIL = 'shub2495@gmail.com'
-    }
+    // environment {
+    //     ALERT_EMAIL = ''
+    // }
     
     stages {
         stage('System Health Check') {
@@ -64,7 +64,7 @@ pipeline {
                     cat health_report.txt >> log_errors.txt
                     cat security_updates.txt >> log_errors.txt
                     
-                    sh 'if grep -q "error" log_errors.txt; then echo "System issues found! Sending alert..." && echo "System issues detected on Jenkins node!" | mail -s "ALERT: System Issues" $ALERT_EMAIL; fi'
+                    // sh 'if grep -q "error" log_errors.txt; then echo "System issues found! Sending alert..." && echo "System issues detected on Jenkins node!" | mail -s "ALERT: System Issues" $ALERT_EMAIL; fi'
                 }
             }
         }
