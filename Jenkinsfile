@@ -1,78 +1,51 @@
 pipeline {
     agent any
     
-    // environment {
-    //     ALERT_EMAIL = ''
-    // }
+    environment {
+        SSH_CREDENTIALS_ID = 'your-ssh-credentials-id'  // Replace with Jenkins credentials ID
+        SERVERS = "server1.example.com server2.example.com"  // Replace with your server list
+    }
     
     stages {
-        stage('System Health Check') {
-            parallel {
-                stage('Check CPU & Memory') {
-                    steps {
-                        script {
-                            sh 'echo "CPU Load:" && uptime'
-                            sh 'echo "Memory Usage:" && free -h'
-                        }
-                    }
-                }
-                
-                stage('Check Disk Space') {
-                    steps {
-                        script {
-                            sh 'echo "Disk Usage:" && df -h'
-                        }
-                    }
-                }
-                
-                stage('Check Uptime') {
-                    steps {
-                        script {
-                            sh 'echo "System Uptime:" && uptime -p'
-                        }
+        stage('Check for Updates') {
+            steps {
+                script {
+                    for (server in SERVERS.split()) {
+                        echo "Checking updates on ${server}"
+                        sshCommand remote: [
+                            host: server,
+                            credentialsId: SSH_CREDENTIALS_ID,
+                            user: 'ubuntu' // Change if needed
+                        ], command: 'sudo apt update && sudo apt list --upgradable'
                     }
                 }
             }
         }
         
-        stage('Monitor System Logs') {
+        stage('Upgrade Packages') {
             steps {
                 script {
-                    sh 'echo "Checking system logs for errors..."'
-                    sh 'grep -i "error" /var/log/syslog | tail -n 10 > log_errors.txt || echo "No errors found"'
-                }
-            }
-        }
-        
-        stage('Security Scan') {
-            steps {
-                script {
-                    sh 'echo "Running security scan..."'
-                    sh 'sudo apt update && sudo apt list --upgradable > security_updates.txt'
-                }
-            }
-        }
-        
-        stage('Generate Report & Send Alert') {
-            steps {
-                script {
-                    sh 'echo "System Health Report" > health_report.txt'
-                    sh 'uptime >> health_report.txt'
-                    sh 'free -h >> health_report.txt'
-                    sh 'df -h >> health_report.txt'
-                    sh 'uptime -p >> health_report.txt'
-                    cat health_report.txt >> log_errors.txt
-                    cat security_updates.txt >> log_errors.txt
-                    
-                    // sh 'if grep -q "error" log_errors.txt; then echo "System issues found! Sending alert..." && echo "System issues detected on Jenkins node!" | mail -s "ALERT: System Issues" $ALERT_EMAIL; fi'
+                    for (server in SERVERS.split()) {
+                        echo "Upgrading packages on ${server}"
+                        sshCommand remote: [
+                            host: server,
+                            credentialsId: SSH_CREDENTIALS_ID,
+                            user: 'ubuntu' // Change if needed
+                        ], command: 'sudo apt upgrade -y && sudo apt autoremove -y'
+                    }
                 }
             }
         }
     }
     
     post {
-        always {
-            archiveArtifacts artifacts: 'health_report.txt, log_errors.txt, security_updates.txt', fingerprint: true
+        success {
+            echo 'Update and upgrade completed successfully!'
+        }
+        failure {
+            echo 'Something went wrong! Check the logs.'
         }
     }
 }
+// This Jenkinsfile automates the process of checking for updates and upgrading packages on multiple servers using SSH.
+// It uses the Jenkins SSH plugin to execute commands on remote servers.
