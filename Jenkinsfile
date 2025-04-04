@@ -1,51 +1,25 @@
-pipeline {
+pipeline{
     agent any
-    
-    environment {
-        SSH_CREDENTIALS_ID = 'your-ssh-credentials-id'  // Replace with Jenkins credentials ID
-        SERVERS = "server1.example.com server2.example.com"  // Replace with your server list
-    }
-    
     stages {
-        stage('Check for Updates') {
+        stage('Build') {
             steps {
-                script {
-                    for (server in SERVERS.split()) {
-                        echo "Checking updates on ${server}"
-                        sshCommand remote: [
-                            host: server,
-                            credentialsId: SSH_CREDENTIALS_ID,
-                            user: 'ubuntu' // Change if needed
-                        ], command: 'sudo apt update && sudo apt list --upgradable'
-                    }
-                }
+                echo 'Building...'
             }
         }
-        
-        stage('Upgrade Packages') {
+        stage('Test') {
             steps {
-                script {
-                    for (server in SERVERS.split()) {
-                        echo "Upgrading packages on ${server}"
-                        sshCommand remote: [
-                            host: server,
-                            credentialsId: SSH_CREDENTIALS_ID,
-                            user: 'ubuntu' // Change if needed
-                        ], command: 'sudo apt upgrade -y && sudo apt autoremove -y'
-                    }
-                }
+                echo 'Testing...'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
             }
         }
     }
-    
     post {
-        success {
-            echo 'Update and upgrade completed successfully!'
-        }
-        failure {
-            echo 'Something went wrong! Check the logs.'
+        always {
+            echo 'This will always run after the stages.'
         }
     }
 }
-// This Jenkinsfile automates the process of checking for updates and upgrading packages on multiple servers using SSH.
-// It uses the Jenkins SSH plugin to execute commands on remote servers.
