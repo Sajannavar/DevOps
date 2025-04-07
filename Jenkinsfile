@@ -3,17 +3,9 @@ pipeline{
     stages {
         stage('Build') {
             steps {
-                echo 'Building...'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
+                echo 'Building...' sd
+                ada
+                asd
             }
         }
     }
@@ -22,4 +14,3 @@ pipeline{
             echo 'This will always run after the stages.'
         }
     }
-}
